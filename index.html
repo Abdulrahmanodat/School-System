@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School System</title>
+    <link rel="stylesheet" href="styles.css">
+   
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Courses</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="form-section">
+            <h2>Add Student</h2>
+            <form id="studentForm">
+                <input type="text" id="fullName" placeholder="Full Name" required>
+                <input type="date" id="dob" required>
+                <select id="gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+                <input type="tel" id="phone" placeholder="Phone Number" required>
+                <select id="grade">
+                    <option value="Administration">Administration</option>
+                    <option value="IT">IT</option>
+                    <option value="Science">Science</option>
+                    <option value="Art">Art</option>
+                </select>
+                <input type="url" id="imageUrl" placeholder="Image URL" required>
+                <button type="submit">Add Student</button>
+            </form>
+        </section>
+        
+        <section class="students-list">
+            <h2>Students</h2>
+            <div id="studentsContainer" class="cards-container"></div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 School System</p>
+    </footer>
+    
+<script>
+   document.getElementById("studentForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    
+    let fullName = document.getElementById("fullName").value;
+    let dob = document.getElementById("dob").value;
+    let gender = document.getElementById("gender").value;
+    let phone = document.getElementById("phone").value;
+    let grade = document.getElementById("grade").value;
+    let imageUrl = document.getElementById("imageUrl").value;
+    
+    let student = {
+        fullName,
+        dob,
+        gender,
+        phone,
+        grade,
+        imageUrl
+    };
+    
+    let students = JSON.parse(localStorage.getItem("students")) || [];
+    students.push(student);
+    localStorage.setItem("students", JSON.stringify(students));
+    
+    renderStudents();
+});
+
+function renderStudents() {
+    let studentsContainer = document.getElementById("studentsContainer");
+    studentsContainer.innerHTML = "";
+    
+    let students = JSON.parse(localStorage.getItem("students")) || [];
+    
+    students.forEach(student => {
+        let studentCard = document.createElement("div");
+        studentCard.classList.add("student-card");
+        studentCard.innerHTML = `
+            <img src="${student.imageUrl}" alt="Student Image">
+            <h3>${student.fullName}</h3>
+            <p><strong>DOB:</strong> ${student.dob}</p>
+            <p><strong>Gender:</strong> ${student.gender}</p>
+            <p><strong>Grade:</strong> ${student.grade}</p>
+            <p><strong>Phone:</strong> ${student.phone}</p>
+        `;
+        studentsContainer.appendChild(studentCard);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", renderStudents);
+
+</script>
+</body>
+</html>
